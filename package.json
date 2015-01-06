@@ -1,0 +1,88 @@
+{
+  "name": "sails-cbes",
+  "version": "0.0.1",
+  "description": "couchbase and elasticsearch adapter for waterline",
+  "main": "index.js",
+  "author": {
+    "name": "Mohammad Bagheri",
+    "email": "mohammad.bagheri@kreditech.com"
+  },
+  "contributors": [
+    {
+      "name": "Robert Savu",
+      "email": "robert@kreditech.com"
+    },
+    {
+      "name": "Luigi-Ilie Aron",
+      "email": "luigi@kreditech.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aronluigi/sails-cbes"
+  },
+  "keywords": [
+    "couchbase",
+    "elasticsearch",
+    "orm",
+    "waterline",
+    "sails",
+    "sailsjs",
+    "sails.js"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~1.12.0",
+    "waterline-adapter-tests": "~0.10.0",
+    "captains-log": "~0.11.1"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "couchbase": "~2.0.1",
+    "elasticsearch": "~3.0.0",
+    "async": "~0.9.0",
+    "waterline-errors": "~0.10.0",
+    "waterline-criteria": "~0.10.7",
+    "waterline-cursor": "~0.0.3"
+  },
+  "waterlineAdapter": {
+    "waterlineVersion": "~0.10.0",
+    "interfaces": [
+      "semantic",
+      "queryable",
+      "associations"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/aronluigi/sails-cbes/issues"
+  },
+  "homepage": "https://github.com/aronluigi/sails-cbes",
+  "_id": "sails-cbes@0.1.0",
+  "dist": {
+    "shasum": "c0c99a7a2bdcef5a8f3e1b17e11980e230d3a02a",
+    "tarball": "http://registry.npmjs.org/sails-cbes/-/sails-cbes-0.1.0.tgz"
+  },
+  "_from": "sails-cbes@",
+  "_npmVersion": "0.1.0",
+  "_npmUser": {
+    "name": "vanetix",
+    "email": "matmcfarland@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "Mohammad Bagheri",
+      "email": "mohammad.bagheri@kreditech.com"
+    },
+    {
+      "name": "Robert Savu",
+      "email": "robert@kreditech.com"
+    },
+    {
+      "name": "Luigi-Ilie Aron",
+      "email": "luigi@kreditech.com"
+    }
+  ],
+  "directories": {},
+  "_shasum": "c0c99a7a2bdcef5a8f3e1b17e11980e230d3a02a",
+  "_resolved": "http://registry.npmjs.org/sails-cbes/-/sails-cbes-0.1.0.tgz"
+}
