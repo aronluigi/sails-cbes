@@ -14,14 +14,12 @@
     "should": "~3.1.2"
   },
   "keywords": [
-    "orm",
-    "tests",
-    "waterline",
-    "adapters",
+    "adapter",
     "sails",
-    "mysql",
-    "postgresql",
-    "mongo"
+    "waterline",
+    "plugin",
+    "couchbase",
+    "elasticsearch"
   ],
   "repository": {
     "type": "git",
