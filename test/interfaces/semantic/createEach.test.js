@@ -3,11 +3,6 @@ var assert = require('assert'),
 
 describe('Semantic Interface', function() {
     describe('.createEach()', function() {
-
-        /////////////////////////////////////////////////////
-        // TEST METHODS
-        ////////////////////////////////////////////////////
-
         it('should create a set of 2 users and check the model', function(done) {
             var usersArray = [
                 { firstName: 'createEach_1', type: 'createEach' },
@@ -86,9 +81,7 @@ describe('Semantic Interface', function() {
 
                         setTimeout(function(){
                             Semantic.User.destroy(query).limit(999999).exec(function(err, users){
-                                if (err) {
-                                    return console.log(err);
-                                }
+                                assert(!err);
 
                                 assert(Array.isArray(users));
                                 assert(users.length === 2);
