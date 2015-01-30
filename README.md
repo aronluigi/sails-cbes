@@ -1,24 +1,153 @@
 ![image_squidhome@2x.png](http://i.imgur.com/RIvu9.png)
 
-# waterline-test
+# Couchbase ElasticSearch sails js adaptor
 
-Provides easy access to `test` from Sails.js & Waterline.
+Provides easy access to couchbase and elasticsearch from Sails.js & Waterline.
 
-This module is a Waterline/Sails adapter, an early implementation of a rapidly-developing, tool-agnostic data standard.  Its goal is to provide a set of declarative interfaces, conventions, and best-practices for integrating with all sorts of data sources.  Not just databases-- external APIs, proprietary web services, or even hardware.
-
-Strict adherence to an adapter specification enables the (re)use of built-in generic test suites, standardized documentation, reasonable expectations around the API for your users, and overall, a more pleasant development experience for everyone.
-
+This module is a Waterline/Sails adapter. Its goal is to provide a set of declarative interfaces, conventions, and best-practices for integrating with all sorts of data sources. Not just databases-- external APIs, proprietary web services, or even hardware.
 
 ### Installation
 
 To install this adapter, run:
 
 ```sh
-$ npm install waterline-test
+$ npm install sails-cbes
+```
+### Before start keep in mind that
+* Auto create Elasticsearch index
+* ElasticSearch mapping is auto imported if it is defined in the model.
+* To update Elasticsearch mapping you need to delete the index
+* For each model a couchbase view will be created. The views are used for getting entire collection
+
+Model with elastic search mapping example:
+```javascript
+module.exports = {
+    identity: 'user',
+    tableName: 'userTable',
+    connection: 'semantic',
+
+    attributes: {
+        firstName: 'string',
+        lastName: 'string',
+        email: {
+            type: 'string',
+            defaultsTo: 'e@test.com'
+        },
+        avatar: 'binary',
+        title: 'string',
+        phone: 'string',
+        type: 'string',
+        favoriteFruit: {
+            defaultsTo: 'blueberry',
+            type: 'string'
+        },
+        age: 'integer', // integer field that's not auto-incrementable
+        dob: 'datetime',
+        status: {
+            type: 'boolean',
+            defaultsTo: false
+        },
+        percent: 'float',
+        list: 'array',
+        obj: 'json',
+        fullName: function () {
+            return this.firstName + ' ' + this.lastName;
+        }
+    },
+
+    mapping: {
+        "_all": {
+            "enabled": false
+        },
+        firstName: {
+            type: 'string',
+            analyzer: 'whitespace',
+            fields: {
+                raw: {
+                    type: 'string',
+                    index: 'not_analyzed'
+                }
+            }
+        },
+        lastName: {
+            type: 'string',
+            analyzer: 'whitespace'
+        },
+        email: {
+            type: 'string',
+            analyzer: 'standard'
+        },
+        avatar: {
+            type: 'binary'
+        },
+        title: {
+            type: 'string',
+            analyzer: 'whitespace',
+        },
+        phone: {
+            type: 'string',
+            analyzer: 'keyword'
+        },
+        type: {
+            type: 'string',
+            analyzer: 'keyword'
+        },
+        favoriteFruit: {
+            type: 'string',
+            analyzer: 'whitespace'
+        },
+        age: {
+            type: 'integer',
+            index: 'not_analyzed'
+        },
+        createdAt: {
+            type: 'date',
+            format: 'dateOptionalTime'
+        },
+        updatedAt: {
+            type: 'date',
+            format: 'dateOptionalTime'
+        },
+        status: {
+            type: 'boolean'
+        },
+        percent: {
+            type: 'float'
+        },
+        obj: {
+            type: 'object'
+        }
+    }
+};
 ```
 
+### Configuration
 
-
+```javascript
+{
+    //couchbase
+    cb: {
+        host: 'localhost',
+        port: 8091,
+        user: 'user',
+        pass: 'password',
+    
+        bucket: {
+            name: 'bucket',
+            pass: 'bucketPassword'
+        }
+    },
+    
+    //elasticsearch  
+    es: {
+        host: ['127.0.0.1:9200'],
+        log: 'error',
+        index: 'index',
+        numberOfShards: 5,
+        numberOfReplicas: 1
+    }
+},
+```
 
 ### Usage
 
@@ -27,91 +156,213 @@ This adapter exposes the following methods:
 ###### `find()`
 
 + **Status**
-  + Planned
+  + Done
+  
+This method accepts Elastic Search [filtered query](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html). Only send the filtered.filter part of the query!
+```javascript
+var elasticsearchFilterQuery = {
+    bool: {
+        must: [
+            {
+                term: {
+                    type: 'createEach'
+                }
+            },
+            {
+                terms: {
+                    firstName: ['createEach_1', 'createEach_2']
+                }
+            }
+        ]
+    }
+};
+
+Semantic.User.find()
+    .where(query)
+    .skip(0)
+    .limit(10)
+    .sort({createdAt: 'desc'})
+    .exec(function(err, res){
+        // do something
+    });
+```
+If you dont set no query to the find() method, find() will use couchbase view and return the entire collection.
+
+This is the generated Elastic Search query for the above exaple:
+
+```javascript
+query: {
+    filtered: {
+        query: {
+            bool: {
+                must: [{
+                    term: {
+                        _type: {
+                            value: modelType
+                        }
+                    }
+                }]
+            }
+        },
+        filter: {
+            bool: {
+                must: [
+                    {
+                        term: {
+                            type: 'createEach'
+                        }
+                    },
+                    {
+                        terms: {
+                            firstName: ['createEach_1', 'createEach_2']
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    size: 10,
+    from: 0,
+    sort: [
+        {
+            createdAt: {
+                order: 'desc'
+            }
+        }
+    ]
+}
+```
+###### `findOne()`
+
++ **Status**
+  + Done
+  
+This method accepts Elastic Search [filtered query](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html). Only send the filtered.filter part of the query!
+
+```javascript
+var elasticsearchFilterQuery = {
+    bool: {
+        must: [
+            {
+                term: {
+                    type: 'findOne'
+                }
+            }
+        ]
+    }
+};
+
+Semantic.User.findOne(elasticsearchFilterQuery).exec(function(err, res){
+    // do something
+});
+```
 
 ###### `create()`
 
 + **Status**
-  + Planned
+  + Done
+ 
+```javascript
+Semantic.User.create({ firstName: 'createEach_1', type: 'createEach' }, function(err, res) {
+    // do something
+})
+```
+###### `createEach()`
+
++ **Status**
+  + Done
+ 
+```javascript
+var usersArray = [
+    { firstName: 'createEach_1', type: 'createEach' },
+    { firstName: 'createEach_2', type: 'createEach' }
+];
+Semantic.User.createEach(usersArray, function(err, res) {
+    // do something
+})
+```
 
 ###### `update()`
 
 + **Status**
-  + Planned
+  + Done
+
+This method accepts Elastic Search [filtered query](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html). Only send the filtered.filter part of the query!
+
+Check find() method.
+```javascript
+var elasticsearchFilterQuery = {
+    bool: {
+        must: [
+            {
+                term: {
+                    type: 'update'
+                }
+            },
+            {
+                term: {
+                    firstName: 'update_1'
+                }
+            }
+        ]
+    }
+};
+
+Semantic.User.update(elasticsearchFilterQuery, {lastName: 'updated'}).exec(function(err, res){
+    // do something
+});
+```
 
 ###### `destroy()`
 
 + **Status**
-  + Planned
+  + Done
 
+This method accepts Elastic Search [filtered query](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html). Only send the filtered.filter part of the query!
 
+Check find() method.
 
-### Interfaces
+```javascript
+var elasticsearchFilterQuery = {
+    bool: {
+        must: [
+            {
+                term: {
+                    type: 'getRawCollection'
+                }
+            }
+        ]
+    }
+};
 
->TODO:
->Specify the interfaces this adapter will support.
->e.g. `This adapter implements the [semantic]() and [queryable]() interfaces.`
-> For more information, check out this repository's [FAQ](./FAQ.md) and the [adapter interface reference](https://github.com/balderdashy/sails-docs/blob/master/adapter-specification.md) in the Sails docs.
+Semantic.User.destroy(elasticsearchFilterQuery).limit(999999).exec(function(err, res){
+    // do something
+});
+```
+###### `getRawCollection()`
 
++ **Status**
+  + Done
+ 
+This method returns raw data from Couchbase view.
+
+``` javascript
+Semantic.User.getRawCollection(function(err, res){
+    // do something
+});
+```
 
 ### Development
 
 Check out **Connections** in the Sails docs, or see the `config/connections.js` file in a new Sails project for information on setting up adapters.
 
-## Getting started
-It's usually pretty easy to add your own adapters for integrating with proprietary systems or existing open APIs.  For most things, it's as easy as `require('some-module')` and mapping the appropriate methods to match waterline semantics.  To get started:
-
-1. Fork this repository
-2. Set up your `README.md` and `package.json` file.  Sails.js adapter module names are of the form sails-*, where * is the name of the datastore or service you're integrating with.
-3. Build your adapter.
-
-
-
-
 ### Running the tests
-
-Configure the interfaces you plan to support (and targeted version of Sails/Waterline) in the adapter's `package.json` file:
-
-```javascript
-{
-  //...
-  "sails": {
-  	"adapter": {
-	    "sailsVersion": "~0.10.0",
-	    "implements": [
-	      "semantic",
-	      "queryable"
-	    ]
-	  }
-  }
-}
-```
 
 In your adapter's directory, run:
 
 ```sh
 $ npm test
 ```
-
-
-## Publish your adapter
-
-> You're welcome to write proprietary adapters and use them any way you wish--
-> these instructions are for releasing an open-source adapter.
-
-1. Create a [new public repo](https://github.com/new) and add it as a remote (`git remote add origin git@github.com:yourusername/sails-youradaptername.git)
-2. Make sure you attribute yourself as the author and set the license in the package.json to "MIT".
-3. Run the tests one last time.
-4. Do a [pull request to sails-docs](https://github.com/balderdashy/sails-docs/compare/) adding your repo to `data/adapters.js`.  Please let us know about any special instructions for usage/testing.
-5. We'll update the documentation with information about your new adapter
-6. Then everyone will adore you with lavish praises.  Mike might even send you jelly beans.
-
-7. Run `npm version patch`
-8. Run `git push && git push --tags`
-9. Run `npm publish`
-
-
-
 
 ### Questions?
 
@@ -132,8 +383,8 @@ See [`FAQ.md`](./FAQ.md).
 ### License
 
 **[MIT](./LICENSE)**
-&copy; 2014 [balderdashy](http://github.com/balderdashy) & [contributors]
-[Mike McNeil](http://michaelmcneil.com), [Balderdash](http://balderdash.co) & contributors
+&copy; 2015 [aronluigi/Kreditech](https://github.com/aronluigi) & [contributors]
+[Mohammad Bagheri](https://github.com/bagheri-m1986), [Robert Savu](https://github.com/r-savu), [Tiago Amorim](https://github.com/tiagoamorim85) & contributors
 
 [Sails](http://sailsjs.org) is free and open-source under the [MIT License](http://sails.mit-license.org/).
 

@@ -33,7 +33,7 @@ describe('Semantic Interface', function() {
         });
 
         it('should getRawCollection 15 users', function(done) {
-            this.timeout(10000);
+            this.timeout(15000);
 
             setTimeout(function(){
                 var query = {
@@ -65,7 +65,7 @@ describe('Semantic Interface', function() {
                         });
                     }, 1000);
                 });
-            }, 7000);
+            }, 10000);
         });
     })
 });
