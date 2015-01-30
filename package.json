@@ -1,0 +1,61 @@
+{
+    "name": "sails-cbes",
+    "version": "0.1.0",
+    "description": "Couchbase/Elasticsearch adapter for Sails / Waterline",
+    "main": "./lib/adapter.js",
+    "scripts": {
+        "test": "node ./test/runner.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aronluigi/sails-cbes.git"
+    },
+    "keywords": [
+        "adapter",
+        "sails",
+        "waterline",
+        "plugin",
+        "couchbase",
+        "elasticsearch"
+    ],
+    "author": "Mohammad Bagheri",
+    "license": "MIT",
+    "readmeFilename": "README.md",
+    "dependencies": {
+        "waterline-errors": "~0.10.1",
+        "async": "*",
+        "elasticsearch": "~3.1.1",
+        "couchbase": "~2.0.4",
+        "lodash": "~3.0.1"
+    },
+    "devDependencies": {
+        "waterline-adapter-tests": "~0.10.8",
+        "mocha": "*",
+        "captains-log": "~0.11.11"
+    },
+    "waterlineAdapter": {
+        "waterlineVersion": "~0.10.0",
+        "interfaces": [
+            "semantic",
+            "queryable"
+        ]
+    },
+    "maintainers": [
+        {
+            "name": "bagheri-m1986",
+            "email": "mohammad.bagheri@kreditech.com"
+        },
+        {
+            "name": "aronluigi",
+            "email": "luigi@kreditech.com"
+        },
+        {
+            "name": "r-savu",
+            "email": "robert@kreditech.com"
+        },
+        {
+            "name": "tiagoamorim85",
+            "email": "tiago.amorim@kreditech.com"
+        }
+    ]
+}
