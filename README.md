@@ -364,12 +364,6 @@ In your adapter's directory, run:
 $ npm test
 ```
 
-### Questions?
-
-See [`FAQ.md`](./FAQ.md).
-
-
-
 ### More Resources
 
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/sails.js)
@@ -383,11 +377,10 @@ See [`FAQ.md`](./FAQ.md).
 ### License
 
 **[MIT](./LICENSE)**
-&copy; 2015 [aronluigi/Kreditech](https://github.com/aronluigi) & [contributors]
-[Mohammad Bagheri](https://github.com/bagheri-m1986), [Robert Savu](https://github.com/r-savu), [Tiago Amorim](https://github.com/tiagoamorim85) & contributors
+&copy; 2015 [Kreditech](http://www.kreditech.com/) / [aronluigi](https://github.com/aronluigi) & [contributors] [Mohammad Bagheri](https://github.com/bagheri-m1986), [Robert Savu](https://github.com/r-savu), [Tiago Amorim](https://github.com/tiagoamorim85) & contributors
+
 
 [Sails](http://sailsjs.org) is free and open-source under the [MIT License](http://sails.mit-license.org/).
-
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/8acf2fc2ca0aca8a3018e355ad776ed7 "githalytics.com")](http://githalytics.com/balderdashy/waterline-test/README.md)
 
