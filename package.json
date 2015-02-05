@@ -1,6 +1,6 @@
 {
     "name": "sails-cbes",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Couchbase/Elasticsearch adapter for Sails / Waterline",
     "main": "./lib/adapter.js",
     "scripts": {
