@@ -178,7 +178,7 @@ var elasticsearchFilterQuery = {
 };
 
 Semantic.User.find()
-    .where(query)
+    .where(elasticsearchFilterQuery)
     .skip(0)
     .limit(10)
     .sort({createdAt: 'desc'})
@@ -188,7 +188,7 @@ Semantic.User.find()
 ```
 If you dont set no query to the find() method, find() will use couchbase view and return the entire collection.
 
-This is the generated Elastic Search query for the above exaple:
+This is the generated Elastic Search query for the above example:
 
 ```javascript
 query: {
