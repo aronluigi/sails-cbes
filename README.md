@@ -231,7 +231,9 @@ query: {
         }
     ]
 }
+
 ```
+
 ###### `findOne()`
 
 + **Status**
@@ -267,6 +269,7 @@ Semantic.User.create({ firstName: 'createEach_1', type: 'createEach' }, function
     // do something
 })
 ```
+
 ###### `createEach()`
 
 + **Status**
@@ -339,6 +342,7 @@ Semantic.User.destroy(elasticsearchFilterQuery).limit(999999).exec(function(err,
     // do something
 });
 ```
+
 ###### `getRawCollection()`
 
 + **Status**
@@ -351,6 +355,48 @@ Semantic.User.getRawCollection(function(err, res){
     // do something
 });
 ```
+
+
+### Document expiration (ttl)
+
+In order to use the document expiration functionality, the model mapping should contain an additional entry, "_ttl", as in the following example:
+
+```javascript
+module.exports = {
+    connection: 'sailsCbes',
+    attributes: {
+        foo: {
+            type: 'string',
+            defaultsTo: 'bar'
+        }
+    },
+    mapping:{
+        foo : {
+            type : 'string',
+            analyzer : 'standard',
+            index : 'analyzed'
+        },
+        _ttl : {
+            "enabled" : true
+        }
+    }
+};
+
+```
+
+This is needed in order to activate the option in the elasticsearch mapping, but by default the document does not expire. The time to live (ttl) for
+the document is specified when instantiating the model, by passing a number specifying the duration in milliseconds:
+
+```javascript
+var data = {
+    foo  : 'newBar',
+    _ttl : 60*1000 //one minute
+};
+
+waterlineModel.create(data).exec(callback);
+
+```
+
 
 ### Development
 
