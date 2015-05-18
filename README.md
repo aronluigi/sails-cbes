@@ -231,7 +231,9 @@ query: {
         }
     ]
 }
+
 ```
+
 ###### `findOne()`
 
 + **Status**
@@ -267,6 +269,7 @@ Semantic.User.create({ firstName: 'createEach_1', type: 'createEach' }, function
     // do something
 })
 ```
+
 ###### `createEach()`
 
 + **Status**
@@ -339,6 +342,7 @@ Semantic.User.destroy(elasticsearchFilterQuery).limit(999999).exec(function(err,
     // do something
 });
 ```
+
 ###### `getRawCollection()`
 
 + **Status**
@@ -348,6 +352,20 @@ This method returns raw data from Couchbase view.
 
 ``` javascript
 Semantic.User.getRawCollection(function(err, res){
+    // do something
+});
+```
+
+###### `reindex()`
+
++ **Status**
+  + Done
+ 
+This method synchronizes couchbase and elasticsearch by dropping the mapping (along with the entries)
+from elasticsearch and reimporting them from couchbase.
+
+``` javascript
+Semantic.User.reindex(function(err){
     // do something
 });
 ```
