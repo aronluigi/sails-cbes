@@ -370,6 +370,47 @@ Semantic.User.reindex(function(err){
 });
 ```
 
+
+### Document expiration (ttl)
+
+In order to use the document expiration functionality, the model should contain an additional attribute, "ttl", as in the following example:
+
+``` javascript
+module.exports = {
+    connection: 'sailsCbes',
+    attributes: {
+        foo: {
+            type: 'string',
+            defaultsTo: 'bar'
+        },
+        ttl: {
+            type: 'int',
+            defaultsTo: 1000 * 60 * 10 // 10 min
+        }
+    }
+    mapping:{
+        foo : {
+            type : 'string',
+            analyzer : 'standard',
+            index : 'analyzed'
+        }
+    }
+};
+```
+
+The default value for ttl must be specified like in the above example. A value of 0 means that by default the document does not expire.
+
+Then the expiration timer can be specified for each document as follows:
+
+``` javascript
+var data = {
+    foo  : 'newBar',
+    ttl : 1000 * 180
+};
+waterlineModel.create(data).exec(callback);
+```
+
+
 ### Development
 
 Check out **Connections** in the Sails docs, or see the `config/connections.js` file in a new Sails project for information on setting up adapters.
