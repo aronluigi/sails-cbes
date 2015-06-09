@@ -359,21 +359,21 @@ Semantic.User.getRawCollection(function(err, res){
 
 ### Document expiration (ttl)
 
-In order to use the document expiration functionality, the model should contain an additional entry, "ttl", as in the following example:
+In order to use the document expiration functionality, the model should contain an additional attribute, "ttl", as in the following example:
 
-```javascript
+``` javascript
 module.exports = {
     connection: 'sailsCbes',
     attributes: {
         foo: {
             type: 'string',
             defaultsTo: 'bar'
+        },
+        ttl: {
+            type: 'int',
+            defaultsTo: 1000 * 60 * 10 // 10 min
         }
-    },
-    ttl : {
-        "enabled" : true
-        "default" : 60*1000 //in milliseconds, optional attribute
-    },
+    }
     mapping:{
         foo : {
             type : 'string',
@@ -382,19 +382,18 @@ module.exports = {
         }
     }
 };
-
 ```
-If the default value for ttl is not specified it defaults to 0, in which case the  the document does not expire, unless the expiration timer
-is specified when creating the document. This can be done at the creation of a document, by providing a "_ttl" attribute.
 
-```javascript
+The default value for ttl must be specified like in the above example. A value of 0 means that by default the document does not expire.
+
+Then the expiration timer can be specified for each document as follows:
+
+``` javascript
 var data = {
     foo  : 'newBar',
-    _ttl : 180*1000
+    ttl : 1000 * 180
 };
-
 waterlineModel.create(data).exec(callback);
-
 ```
 
 
