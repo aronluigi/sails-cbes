@@ -373,7 +373,7 @@ Semantic.User.reindex(function(err){
 
 ### Document expiration (ttl)
 
-In order to use the document expiration functionality, the model should contain an additional attribute, "ttl", as in the following example:
+In order to use the document expiration functionality, the model should contain an additional attribute, "_ttl", as in the following example:
 
 ``` javascript
 module.exports = {
@@ -383,7 +383,7 @@ module.exports = {
             type: 'string',
             defaultsTo: 'bar'
         },
-        ttl: {
+        _ttl: {
             type: 'int',
             defaultsTo: 1000 * 60 * 10 // 10 min
         }
@@ -405,7 +405,7 @@ Then the expiration timer can be specified for each document as follows:
 ``` javascript
 var data = {
     foo  : 'newBar',
-    ttl : 1000 * 180
+    _ttl : 1000 * 180
 };
 waterlineModel.create(data).exec(callback);
 ```
