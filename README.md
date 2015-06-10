@@ -131,6 +131,7 @@ module.exports = {
         port: 8091,
         user: 'user',
         pass: 'password',
+        operationTimeout: 60 * 1000, // 60s
     
         bucket: {
             name: 'bucket',
@@ -436,11 +437,10 @@ $ npm test
 ### License
 
 **[MIT](./LICENSE)**
+
+<a href="https://www.kreditech.com/" target="_blank" title="Kreditech"><img src="https://www.kreditech.com/wp-content/themes/kreditech/img/logo.svg" width="340" height="50" alt="Kreditech"/></a>
+
 &copy; 2015 [Kreditech](http://www.kreditech.com/) / [aronluigi](https://github.com/aronluigi) & [contributors] [Mohammad Bagheri](https://github.com/bagheri-m1986), [Robert Savu](https://github.com/r-savu), [Tiago Amorim](https://github.com/tiagoamorim85) & contributors
 
 
-[Sails](http://sailsjs.org) is free and open-source under the [MIT License](http://sails.mit-license.org/).
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/8acf2fc2ca0aca8a3018e355ad776ed7 "githalytics.com")](http://githalytics.com/balderdashy/waterline-test/README.md)
-
-
+[Sails](http://sailsjs.org) is free and open-source under the [MIT License](http://sails.mit-license.org/)
