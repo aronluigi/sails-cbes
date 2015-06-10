@@ -131,6 +131,7 @@ module.exports = {
         port: 8091,
         user: 'user',
         pass: 'password',
+        operationTimeout: 60 * 1000, // 60s
     
         bucket: {
             name: 'bucket',
@@ -231,7 +232,9 @@ query: {
         }
     ]
 }
+
 ```
+
 ###### `findOne()`
 
 + **Status**
@@ -267,6 +270,7 @@ Semantic.User.create({ firstName: 'createEach_1', type: 'createEach' }, function
     // do something
 })
 ```
+
 ###### `createEach()`
 
 + **Status**
@@ -339,6 +343,7 @@ Semantic.User.destroy(elasticsearchFilterQuery).limit(999999).exec(function(err,
     // do something
 });
 ```
+
 ###### `getRawCollection()`
 
 + **Status**
@@ -351,6 +356,61 @@ Semantic.User.getRawCollection(function(err, res){
     // do something
 });
 ```
+
+###### `reindex()`
+
++ **Status**
+  + Done
+ 
+This method synchronizes couchbase and elasticsearch by dropping the mapping (along with the entries)
+from elasticsearch and reimporting them from couchbase.
+
+``` javascript
+Semantic.User.reindex(function(err){
+    // do something
+});
+```
+
+
+### Document expiration (ttl)
+
+In order to use the document expiration functionality, the model should contain an additional attribute, "_ttl", as in the following example:
+
+``` javascript
+module.exports = {
+    connection: 'sailsCbes',
+    attributes: {
+        foo: {
+            type: 'string',
+            defaultsTo: 'bar'
+        },
+        _ttl: {
+            type: 'int',
+            defaultsTo: 1000 * 60 * 10 // 10 min
+        }
+    }
+    mapping:{
+        foo : {
+            type : 'string',
+            analyzer : 'standard',
+            index : 'analyzed'
+        }
+    }
+};
+```
+
+The default value for ttl must be specified like in the above example. A value of 0 means that by default the document does not expire.
+
+Then the expiration timer can be specified for each document as follows:
+
+``` javascript
+var data = {
+    foo  : 'newBar',
+    _ttl : 1000 * 180
+};
+waterlineModel.create(data).exec(callback);
+```
+
 
 ### Development
 
@@ -377,11 +437,10 @@ $ npm test
 ### License
 
 **[MIT](./LICENSE)**
+
+<a href="https://www.kreditech.com/" target="_blank" title="Kreditech"><img src="https://www.kreditech.com/wp-content/themes/kreditech/img/logo.svg" width="340" height="50" alt="Kreditech"/></a>
+
 &copy; 2015 [Kreditech](http://www.kreditech.com/) / [aronluigi](https://github.com/aronluigi) & [contributors] [Mohammad Bagheri](https://github.com/bagheri-m1986), [Robert Savu](https://github.com/r-savu), [Tiago Amorim](https://github.com/tiagoamorim85) & contributors
 
 
-[Sails](http://sailsjs.org) is free and open-source under the [MIT License](http://sails.mit-license.org/).
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/8acf2fc2ca0aca8a3018e355ad776ed7 "githalytics.com")](http://githalytics.com/balderdashy/waterline-test/README.md)
-
-
+[Sails](http://sailsjs.org) is free and open-source under the [MIT License](http://sails.mit-license.org/)
