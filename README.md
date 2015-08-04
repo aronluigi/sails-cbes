@@ -371,6 +371,51 @@ Semantic.User.reindex(function(err){
 });
 ```
 
+### Backup and Restore
+
+In order to use the backup and restore methods, run the install script on the root folder:
+``` bash
+./install.sh
+``` 
+###### `backup()`
+
++ **Status**
+  + Done
+ 
+This method create a full backup of the entire collection from couchbase.
+
+``` javascript
+var _options = {
+    backupPath: 'backupPath'
+};
+
+Semantic.User.backup(options, function(err, stderror){
+    // do something
+});
+```
+
+For more information read the [cbbackup](http://docs.couchbase.com/admin/admin/Tasks/backup-cbbackup.html) documentation.
+
+###### `restore()`
+
++ **Status**
+  + Done
+ 
+This method restore a full backup of the entire collection to couchbase and elasticsearch.
+
+``` javascript
+var _options = {
+    backupPath: 'backupPath'
+};
+
+Semantic.User.restore(options, reindexDelay, function(err, stderror){
+    // do something
+});
+```
+
+The reindexDelay parameter is user to delay the reindex of every bucket on elasticsearch.
+
+For more information read the [cbrestore](http://docs.couchbase.com/admin/admin/Tasks/restore-cbrestore.html) documentation.
 
 ### Document expiration (ttl)
 
