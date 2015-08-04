@@ -412,11 +412,9 @@ var aggregations = {
       "field" : "accountNumber"
     }
   },
-  {
-    "currency" : {
-      "terms" : {
-        "field" : "currency"
-      }
+  "currency" : {
+    "terms" : {
+      "field" : "currency"
     }
   }
 }
