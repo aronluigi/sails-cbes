@@ -371,12 +371,63 @@ Semantic.User.reindex(function(err){
 });
 ```
 
-### Backup and Restore
+###### `aggregate()`
 
-In order to use the backup and restore methods, run the install script on the root folder:
-``` bash
-./install.sh
-``` 
++ **Status**
+  + Done
+ 
+This method returns the aggregation results according to the provided query (and aggregation specification). Read mode about
+Elasticsearch aggregations [here](https://www.elastic.co/guide/en/elasticsearch/guide/current/aggregations.html). Unlike the 
+Elasticsearch implementation, aggregations object should reside in the first layer within the query object (as opposed to side-by-side)
+and only the "aggs" key is recognized ("aggregations" will not work). Note: the result is the unmodified JSON output of Elasticsearch  
+
+Example usage:
+
+``` javascript
+
+var query = {
+  "where" : {
+    "and" : [
+      {
+        "or" : [
+          {
+            "term" : {
+              "country" : "es"
+            }
+          },
+          {
+            "term" : {
+              "country" : "pl"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+
+var aggregations = {
+  "account" : {
+    "terms" : {
+      "field" : "accountNumber"
+    }
+  },
+  "currency" : {
+    "terms" : {
+      "field" : "currency"
+    }
+  }
+}
+
+query["aggs"] = aggregations;
+
+Transaction.aggregate(query, function(err, res) {
+  if (!err) ...
+});
+```
+
+### Backup and Restore
+ 
 ###### `backup()`
 
 + **Status**
