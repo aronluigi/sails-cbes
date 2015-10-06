@@ -507,6 +507,31 @@ var data = {
 waterlineModel.create(data).exec(callback);
 ```
 
+### Sorting by script
+
+To use this you first have to add the following line to your elasticsearch configuration file:
+```yaml
+script.disable_dynamic: false
+```
+For more advanced sorting functionality you can use the Elasticsearch [sorting by script](https://www.elastic.co/guide/en/elasticsearch/reference/1.5/search-request-sort.html#_script_based_sorting) method. Example:
+
+``` javascript
+Semantic.User.find()
+    .where(elasticsearchFilterQuery)
+    .skip(0)
+    .limit(10)
+    .sort({
+        "_script": {
+            "script": "doc['amount'].value / (exp(doc['decimals'].value * log(10)))",
+            "lang": "groovy",
+            "type": "number",
+            "order": ord
+        }
+    })
+    .exec(function(err, res){
+        // do something
+    });
+```
 
 ### Development
 
