@@ -130,6 +130,7 @@ module.exports = {
         host: 'localhost',
         port: 8091,
         user: 'user',
+        version: '3.0.3',
         pass: 'password',
         operationTimeout: 60 * 1000, // 60s
     
@@ -433,18 +434,26 @@ Transaction.aggregate(query, function(err, res) {
 + **Status**
   + Done
  
-This method create a full backup of the entire collection from couchbase.
+ This method create a full backup of the entire bucket from couchbase. For version 2.1.1 of cbbackup the adapter will create a folder with the current timestamp and dump the backup tool's output into the created folder. The version 3.0.x of cbbackup will create the timestamped folder by itself along with another layer of folders separating full and differential backups.
 
 ``` javascript
 var _options = {
+    bucketSource: 'someBucket',
+    user: 'username',
+    version: '2.5.1',
+    password: '1231%)_',
+    threads: '4',
+    cbUrl: 'http://...'
+    mode: 'full',
     backupPath: 'backupPath'
 };
 
-Semantic.User.backup(options, function(err, stderror){
+Semantic.User.backup(_options, function(err, stderr){
     // do something
 });
 ```
-
+In the above example all of the option params would be taken from the sails connection config except for the backupPath (which becomes thus a required parameter) and mode, which only works in version 3.0.x.
+The backup function called from any model will create the backup for the whole bucket.
 For more information read the [cbbackup](http://docs.couchbase.com/admin/admin/Tasks/backup-cbbackup.html) documentation.
 
 ###### `restore()`
