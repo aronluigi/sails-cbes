@@ -146,6 +146,7 @@ module.exports = {
         log: 'error',
         index: 'index',
         numberOfShards: 5,
+        requestTimeout: 30000,
         numberOfReplicas: 1
     }
 },
