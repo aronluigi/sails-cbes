@@ -16,7 +16,6 @@ module.exports = Waterline.Collection.extend({
         email: {
             type: 'string',
             defaultsTo: 'e@test.com',
-            unique: true
         }
     },
 
