@@ -5,7 +5,7 @@
   "main": "./lib/adapter.js",
   "scripts": {
     "test": "node ./test/runner.js",
-    "install": "sh install.sh"
+    "install": "/bin/sh install.sh"
 
   },
   "repository": {
@@ -26,14 +26,14 @@
   "dependencies": {
     "waterline-errors": "~0.10.1",
     "async": "*",
-    "elasticsearch": "~5.0.0",
-    "couchbase": "~2.0.8",
-    "lodash": "~3.9.3"
+    "elasticsearch": "~8.2.0",
+    "couchbase": "~2.1.2",
+    "lodash": "~3.10.1"
   },
   "devDependencies": {
     "captains-log": "~0.11.11",
     "mocha": "*",
-    "waterline-adapter-tests": "~0.10.12"
+    "waterline-adapter-tests": "~0.10.14"
   },
   "waterlineAdapter": {
     "waterlineVersion": "~0.10.0",

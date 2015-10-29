@@ -9,7 +9,9 @@ var assert = require('assert');
 
 // Require Fixtures
 var fixtures = {
-    UserFixture: require('./fixtures/crud.fixture')
+    UserFixture: require('./fixtures/crud.fixture'),
+    UniqueFixture: require('./fixtures/unique.fixture'),
+    Customid: require('./fixtures/customid.fixture')
 };
 
 /////////////////////////////////////////////////////

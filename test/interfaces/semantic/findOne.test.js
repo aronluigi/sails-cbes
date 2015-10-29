@@ -20,40 +20,36 @@ describe('Semantic Interface', function() {
         });
 
         it('should find 1 users', function(done) {
-            setTimeout(function(){
-                var query = {
-                    bool: {
-                        must: [
-                            {
-                                term: {
-                                    type: 'findOne'
-                                }
+            var query = {
+                bool: {
+                    must: [
+                        {
+                            term: {
+                                type: 'findOne'
                             }
-                        ]
-                    }
-                };
+                        }
+                    ]
+                }
+            };
 
-                Semantic.User.findOne(query).exec(function(err, user){
+            Semantic.User.findOne(query).exec(function(err, user){
+                assert(!err);
+
+                assert(user instanceof Object);
+                assert(user.id);
+                assert(typeof user.fullName === 'function');
+                assert(toString.call(new Date(user.createdAt)) == '[object Date]');
+                assert(toString.call(new Date(user.updatedAt)) == '[object Date]');
+
+                Semantic.User.destroy(query).limit(999999).exec(function(err, users){
                     assert(!err);
 
-                    assert(user instanceof Object);
-                    assert(user.id);
-                    assert(typeof user.fullName === 'function');
-                    assert(toString.call(new Date(user.createdAt)) == '[object Date]');
-                    assert(toString.call(new Date(user.updatedAt)) == '[object Date]');
+                    assert(Array.isArray(users));
+                    assert(users.length === 2);
 
-                    setTimeout(function(){
-                        Semantic.User.destroy(query).limit(999999).exec(function(err, users){
-                            assert(!err);
-
-                            assert(Array.isArray(users));
-                            assert(users.length === 2);
-
-                            done();
-                        });
-                    }, 1000);
+                    done();
                 });
-            }, 1000);
+            });
         });
     })
 });
