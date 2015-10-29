@@ -269,7 +269,8 @@ Semantic.User.create({ firstName: 'createEach_1', type: 'createEach' }, function
 })
 ```
 **Create document with custom ID**
-You must set the mode "____ID____" attribute!
+
+You must set the model "_ID_" attribute!
 
 Model example:
 ```
