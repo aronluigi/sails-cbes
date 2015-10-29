@@ -33,35 +33,31 @@ describe('Semantic Interface', function() {
         });
 
         it('should count 15 users', function(done) {
-            setTimeout(function(){
-                var query = {
-                    bool: {
-                        must: [
-                            {
-                                term: {
-                                    type: 'count'
-                                }
+            var query = {
+                bool: {
+                    must: [
+                        {
+                            term: {
+                                type: 'count'
                             }
-                        ]
-                    }
-                };
+                        }
+                    ]
+                }
+            };
 
-                Semantic.User.count(query).exec(function(err, data){
+            Semantic.User.count(query).exec(function(err, data){
+                assert(!err);
+                assert(data === 15);
+
+                Semantic.User.destroy(query).limit(999999).exec(function(err, users){
                     assert(!err);
-                    assert(data === 15);
 
-                    setTimeout(function(){
-                        Semantic.User.destroy(query).limit(999999).exec(function(err, users){
-                            assert(!err);
+                    assert(Array.isArray(users));
+                    assert(users.length === 15);
 
-                            assert(Array.isArray(users));
-                            assert(users.length === 15);
-
-                            done();
-                        });
-                    }, 1000);
+                    done();
                 });
-            }, 1000);
+            });
         });
     })
 });

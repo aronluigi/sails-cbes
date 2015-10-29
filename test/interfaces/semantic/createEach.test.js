@@ -46,55 +46,51 @@ describe('Semantic Interface', function() {
                 }
             };
 
-            setTimeout(function(){
-                Semantic.User.find()
-                    .where(query)
-                    .skip(0)
-                    .limit(10)
-                    .sort({createdAt: 'desc'})
-                    .exec(function(err, users) {
+            Semantic.User.find()
+                .where(query)
+                .skip(0)
+                .limit(10)
+                .sort({createdAt: 'desc'})
+                .exec(function(err, users) {
+                    assert(!err);
+                    assert(Array.isArray(users));
+                    assert(users.length === 2);
+
+                    assert(users[0].id);
+                    assert(typeof users[0].fullName === 'function');
+                    assert(toString.call(new Date(users[0].createdAt)) == '[object Date]');
+                    assert(toString.call(new Date(users[0].updatedAt)) == '[object Date]');
+
+                    var query = {
+                        bool: {
+                            must: [
+                                {
+                                    term: {
+                                        type: 'createEach'
+                                    }
+                                },
+                                {
+                                    terms: {
+                                        firstName: ['createEach_1', 'createEach_2']
+                                    }
+                                }
+                            ]
+                        }
+                    };
+
+                    Semantic.User.destroy(query).limit(999999).exec(function(err, users){
                         assert(!err);
+
                         assert(Array.isArray(users));
                         assert(users.length === 2);
 
                         assert(users[0].id);
-                        assert(typeof users[0].fullName === 'function');
                         assert(toString.call(new Date(users[0].createdAt)) == '[object Date]');
                         assert(toString.call(new Date(users[0].updatedAt)) == '[object Date]');
 
-                        var query = {
-                            bool: {
-                                must: [
-                                    {
-                                        term: {
-                                            type: 'createEach'
-                                        }
-                                    },
-                                    {
-                                        terms: {
-                                            firstName: ['createEach_1', 'createEach_2']
-                                        }
-                                    }
-                                ]
-                            }
-                        };
-
-                        setTimeout(function(){
-                            Semantic.User.destroy(query).limit(999999).exec(function(err, users){
-                                assert(!err);
-
-                                assert(Array.isArray(users));
-                                assert(users.length === 2);
-
-                                assert(users[0].id);
-                                assert(toString.call(new Date(users[0].createdAt)) == '[object Date]');
-                                assert(toString.call(new Date(users[0].updatedAt)) == '[object Date]');
-
-                                done();
-                            });
-                        }, 1000);
+                        done();
                     });
-            }, 1000);
+                });
         });
     });
 });

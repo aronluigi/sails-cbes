@@ -54,16 +54,14 @@ describe('Semantic Interface', function() {
                     assert(Array.isArray(users));
                     assert(users.length === 15);
 
-                    setTimeout(function(){
-                        Semantic.User.destroy(query).limit(999999).exec(function(err, _users){
-                            assert(!err);
+                    Semantic.User.destroy(query).limit(999999).exec(function(err, _users){
+                        assert(!err);
 
-                            assert(Array.isArray(_users));
-                            assert(_users.length === 15);
+                        assert(Array.isArray(_users));
+                        assert(_users.length === 15);
 
-                            done();
-                        });
-                    }, 1000);
+                        done();
+                    });
                 });
             }, 10000);
         });

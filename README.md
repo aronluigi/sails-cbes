@@ -22,10 +22,6 @@ $ npm install sails-cbes
 Model with elastic search mapping example:
 ```javascript
 module.exports = {
-    identity: 'user',
-    tableName: 'userTable',
-    connection: 'semantic',
-
     attributes: {
         firstName: 'string',
         lastName: 'string',
@@ -133,14 +129,14 @@ module.exports = {
         version: '3.0.3',
         pass: 'password',
         operationTimeout: 60 * 1000, // 60s
-    
+
         bucket: {
             name: 'bucket',
             pass: 'bucketPassword'
         }
     },
-    
-    //elasticsearch  
+
+    //elasticsearch
     es: {
         host: ['127.0.0.1:9200'],
         log: 'error',
@@ -160,7 +156,7 @@ This adapter exposes the following methods:
 
 + **Status**
   + Done
-  
+
 This method accepts Elastic Search [filtered query](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html). Only send the filtered.filter part of the query!
 ```javascript
 var elasticsearchFilterQuery = {
@@ -241,7 +237,7 @@ query: {
 
 + **Status**
   + Done
-  
+
 This method accepts Elastic Search [filtered query](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html). Only send the filtered.filter part of the query!
 
 ```javascript
@@ -266,18 +262,62 @@ Semantic.User.findOne(elasticsearchFilterQuery).exec(function(err, res){
 
 + **Status**
   + Done
- 
+
 ```javascript
 Semantic.User.create({ firstName: 'createEach_1', type: 'createEach' }, function(err, res) {
     // do something
 })
 ```
+**Create document with custom ID**
+You must set the mode "____ID____" attribute!
 
+Model example:
+```
+    attributes: {
+        _ID_: 'string',
+        firstName: 'string',
+        lastName: 'string',
+        email: {
+            type: 'string',
+            defaultsTo: 'e@test.com'
+        }
+    },
+
+    mapping: {
+        "_all": {
+            "enabled": false
+        },
+        firstName: {
+            type: 'string',
+            analyzer: 'whitespace',
+            fields: {
+                raw: {
+                    type: 'string',
+                    index: 'not_analyzed'
+                }
+            }
+        },
+        lastName: {
+            type: 'string',
+            analyzer: 'whitespace'
+        },
+        email: {
+            type: 'string',
+            analyzer: 'standard'
+        }
+    }
+```
+
+```
+Semantic.User.create({_ID_: 'testCustomID123'}, function(err, users) {
+    // do something
+});
+```
 ###### `createEach()`
 
 + **Status**
   + Done
- 
+
 ```javascript
 var usersArray = [
     { firstName: 'createEach_1', type: 'createEach' },
@@ -350,7 +390,7 @@ Semantic.User.destroy(elasticsearchFilterQuery).limit(999999).exec(function(err,
 
 + **Status**
   + Done
- 
+
 This method returns raw data from Couchbase view.
 
 ``` javascript
@@ -363,7 +403,7 @@ Semantic.User.getRawCollection(function(err, res){
 
 + **Status**
   + Done
- 
+
 This method synchronizes couchbase and elasticsearch by dropping the mapping (along with the entries)
 from elasticsearch and reimporting them from couchbase.
 
@@ -377,11 +417,11 @@ Semantic.User.reindex(function(err){
 
 + **Status**
   + Done
- 
+
 This method returns the aggregation results according to the provided query (and aggregation specification). Read mode about
-Elasticsearch aggregations [here](https://www.elastic.co/guide/en/elasticsearch/guide/current/aggregations.html). Unlike the 
+Elasticsearch aggregations [here](https://www.elastic.co/guide/en/elasticsearch/guide/current/aggregations.html). Unlike the
 Elasticsearch implementation, aggregations object should reside in the first layer within the query object (as opposed to side-by-side)
-and only the "aggs" key is recognized ("aggregations" will not work). Note: the result is the unmodified JSON output of Elasticsearch  
+and only the "aggs" key is recognized ("aggregations" will not work). Note: the result is the unmodified JSON output of Elasticsearch
 
 Example usage:
 
@@ -429,12 +469,12 @@ Transaction.aggregate(query, function(err, res) {
 ```
 
 ### Backup and Restore
- 
+
 ###### `backup()`
 
 + **Status**
   + Done
- 
+
  This method create a full backup of the entire bucket from couchbase. For version 2.1.1 of cbbackup the adapter will create a folder with the current timestamp and dump the backup tool's output into the created folder. The version 3.0.x of cbbackup will create the timestamped folder by itself along with another layer of folders separating full and differential backups.
 
 ``` javascript
@@ -461,7 +501,7 @@ For more information read the [cbbackup](http://docs.couchbase.com/admin/admin/T
 
 + **Status**
   + Done
- 
+
 This method restore a full backup of the entire collection to couchbase and elasticsearch.
 
 ``` javascript
