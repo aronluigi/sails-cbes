@@ -10,6 +10,7 @@ module.exports = Waterline.Collection.extend({
     connection: 'semantic',
 
     attributes: {
+        _ID_: 'string',
         firstName: 'string',
         lastName: 'string',
         email: {
