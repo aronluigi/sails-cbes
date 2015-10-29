@@ -15,43 +15,39 @@ describe('Semantic Interface', function() {
         });
 
         it('should find update users', function(done) {
-            setTimeout(function(){
-                var query = {
-                    bool: {
-                        must: [
-                            {
-                                term: {
-                                    type: 'update'
-                                }
-                            },
-                            {
-                                term: {
-                                    firstName: 'update_1'
-                                }
+            var query = {
+                bool: {
+                    must: [
+                        {
+                            term: {
+                                type: 'update'
                             }
-                        ]
-                    }
-                };
+                        },
+                        {
+                            term: {
+                                firstName: 'update_1'
+                            }
+                        }
+                    ]
+                }
+            };
 
-                Semantic.User.update(query, {lastName: 'updated', _TYPE: 'test'}).exec(function(err, user){
+            Semantic.User.update(query, {lastName: 'updated', _TYPE: 'test'}).exec(function(err, user){
+                assert(!err);
+
+                assert(user[0] instanceof Object);
+                assert(user[0].id);
+                assert(typeof user[0].fullName === 'function');
+                assert(toString.call(new Date(user[0].createdAt)) == '[object Date]');
+                assert(toString.call(new Date(user[0].updatedAt)) == '[object Date]');
+
+                Semantic.User.destroy(query).limit(999999).exec(function(err, users){
                     assert(!err);
 
-                    assert(user[0] instanceof Object);
-                    assert(user[0].id);
-                    assert(typeof user[0].fullName === 'function');
-                    assert(toString.call(new Date(user[0].createdAt)) == '[object Date]');
-                    assert(toString.call(new Date(user[0].updatedAt)) == '[object Date]');
-
-                    setTimeout(function(){
-                        Semantic.User.destroy(query).limit(999999).exec(function(err, users){
-                            assert(!err);
-
-                            assert(Array.isArray(users));
-                            done();
-                        });
-                    }, 1000);
+                    assert(Array.isArray(users));
+                    done();
                 });
-            }, 1000);
+            });
         });
     })
 });
