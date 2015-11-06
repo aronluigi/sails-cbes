@@ -6,6 +6,7 @@ Provides easy access to couchbase and elasticsearch from Sails.js & Waterline.
 
 This module is a Waterline/Sails adapter. Its goal is to provide a set of declarative interfaces, conventions, and best-practices for integrating with all sorts of data sources. Not just databases-- external APIs, proprietary web services, or even hardware.
 
+For Go lovers - [go-cbes](https://github.com/Kreditech/go-cbes)
 ### Installation
 
 To install this adapter, run:
@@ -231,6 +232,17 @@ query: {
     ]
 }
 
+```
+
+###### `where()`
+if your query is a 'or' query, you must use 'OR'. Please see the example below: 
+
+```
+var query = {
+    OR: {
+        filters: []
+    }
+};
 ```
 
 ###### `findOne()`
