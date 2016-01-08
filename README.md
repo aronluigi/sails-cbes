@@ -515,7 +515,7 @@ For more information read the [cbbackup](http://docs.couchbase.com/admin/admin/T
 + **Status**
   + Done
 
-This method restore a full backup of the entire collection to couchbase and elasticsearch.
+This method restore a full backup of the entire collection to couchbase. In order to make the data queryable after a restore process you have to call `reindex` on each model or `reindexAll` on any of them.
 
 ``` javascript
 var _options = {
